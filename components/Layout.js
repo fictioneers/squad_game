@@ -5,7 +5,7 @@ const Layout = ({ children }) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Who's That Pokemon?</title>
+        <title>Who&apos;s That Pokemon?</title>
         <meta name="description" content="Pokemon identification quiz" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
