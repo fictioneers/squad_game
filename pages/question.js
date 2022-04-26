@@ -1,4 +1,3 @@
-import styles from '../styles/Home.module.css'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
@@ -56,7 +55,7 @@ export default function Question() {
   if (screen == 'loading') {
     return (
       <>
-        <p className={styles.description}>
+        <p className="description">
             Loading...
         </p>
       </>
