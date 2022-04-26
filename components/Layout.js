@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Head from 'next/head'
 import styles from '../styles/Layout.module.css'
 
@@ -11,6 +12,9 @@ const Layout = ({ children }) => {
       </Head>
 
       <main className={styles.main}>
+        <h1 className={styles.title}>
+          <Image src="/title.png" alt="Who's That Pokemon?" width="710" height="92" />
+        </h1>
         {children}
       </main>
 

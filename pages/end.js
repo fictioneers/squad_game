@@ -1,7 +1,17 @@
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { useRouter } from 'next/router'
 
 export default function End() {
+  const router = useRouter();
+
+  const tryAgainClicked = () => {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('score');
+    localStorage.removeItem('outOf');
+    router.push('/');
+  }
+
   return (
     <>
       <h1 className={styles.title}>
@@ -9,10 +19,12 @@ export default function End() {
       </h1>
 
       <p className={styles.description}>
-        <button>
-          <Image src="/try_again.png" alt="Try Again!" width="345" height="111" />
-        </button>
+        You scored {localStorage.getItem('score')} out of {localStorage.getItem('outOf')}!
       </p>
+
+      <button onClick={tryAgainClicked}>
+          <Image src="/try_again.png" alt="Try Again!" width="345" height="111" />
+      </button>
     </>
   )
 }

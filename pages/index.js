@@ -1,18 +1,18 @@
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { useRouter } from 'next/router'
 
 export default function Home() {
-  return (
-  <>
-    <h1 className={styles.title}>
-      <Image src="/title.png" alt="Who's That Pokemon?" width="710" height="92" />
-    </h1>
+  const router = useRouter();
+  const start = () => {
+    router.push('/question');
+  };
 
+  return (
     <p className={styles.description}>
-      <button>
+      <button onClick={start}>
         <Image src="/get_started.png" alt="Get Started!" width="434" height="100" />
       </button>
     </p>
-  </>
   )
 }
