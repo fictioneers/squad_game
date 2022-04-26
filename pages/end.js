@@ -18,7 +18,9 @@ export default function End() {
 
   if (!score || !outOf) {
     return (
-      <p>Loading...</p>
+      <p className="description">
+          Loading...
+      </p>
     )
   }
 
