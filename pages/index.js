@@ -1,8 +1,22 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { useEffect } from "react"
 
 export default function Home() {
   const router = useRouter();
+
+  useEffect(() => {
+    if (localStorage.getItem('score')) {
+      localStorage.removeItem('userId');
+      localStorage.removeItem('score');
+      localStorage.removeItem('outOf');
+      localStorage.removeItem('questionContent');
+      localStorage.removeItem('questionId');
+    } else if (localStorage.getItem('userId')) {
+      router.push('/question');
+    }
+  }, [])
+
   const start = () => {
     router.push('/question');
   };

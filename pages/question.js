@@ -10,18 +10,25 @@ export default function Question() {
   const [ answerImage, setAnswerImage ] = useState(null);
 
   useEffect(() => {
-    const getUser = async () => {
-      const userId = localStorage.getItem("userId");
-      if (!userId) {
-        const response = await (await fetch("/api/start")).json();
-        localStorage.setItem("userId", response.userId);
-        setUserId(response.userId);
-        setQuestionContent(response.question);
-        setQuestionId(response.questionId);
-        setScreen('question');
-      }
+    const getUser = async () => { 
+      const response = await (await fetch("/api/start")).json();
+      localStorage.setItem("userId", response.userId);
+      setUserId(response.userId);
+      setQuestionContent(response.question);
+      setQuestionId(response.questionId);
+      setScreen('question');
+      localStorage.setItem('questionContent', JSON.stringify(response.question));
+      localStorage.setItem('questionId', response.questionId);
     }
-    getUser();
+    const storedUserId = localStorage.getItem("userId");
+    if (!storedUserId) {
+      getUser();
+    } else {
+      setUserId(storedUserId);
+      setQuestionContent(JSON.parse(localStorage.getItem('questionContent')));
+      setQuestionId(localStorage.getItem('questionId'));
+      setScreen('question');
+    }
   }, []);
 
   const clickAnswer = answer => {
@@ -44,6 +51,8 @@ export default function Question() {
       setScreen(response.result);
       setQuestionContent(response.question);
       setQuestionId(response.questionId);
+      localStorage.setItem('questionContent', JSON.stringify(response.question));
+      localStorage.setItem('questionId', response.questionId);
       if (response.result == 'correct') {
         setAnswerImage(response.answerImage)
       }
