@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 import Fictioneers from "fictioneers-node-sdk";
-import { progressToNextQuestionContent, questionContent } from "../../helpers/helpers";
+import { progressToNextQuestionContent, questionContent, generateHash } from "../../helpers/helpers";
 
 export default async function handler(req, res) {
   // Generate user ID
@@ -17,10 +17,16 @@ export default async function handler(req, res) {
   if (!result) {
     return;
   }
-  console.log(`Result: ${result}`);
   const [questionId, content] = result;
   // Get content
   const [answers, image] = await questionContent(content[0].content_id)
+  // Generate start time
+  const timestamp = (new Date(Date.now())).toISOString();
+  const hash = await generateHash(timestamp);
+  const startTime = {
+    timestamp,
+    hash,
+  }
   // Return question 1
   res.status(200).json({
     userId,
@@ -29,5 +35,6 @@ export default async function handler(req, res) {
       answers,
       image,
     },
+    startTime,
   });
 }

@@ -40,3 +40,9 @@ export const questionContent = async (content_id) => {
   shuffle(answers);
   return [answers, question.fields.image.fields.file.url]
 }
+
+const crypto = require('crypto');
+export const generateHash = (timestamp) => {
+  const plainText = timestamp + process.env.HASH_SALT
+  return crypto.createHash('sha256').update(plainText, 'utf8').digest('hex');
+}

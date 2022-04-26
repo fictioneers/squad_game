@@ -1,5 +1,5 @@
 import Fictioneers from "fictioneers-node-sdk";
-import { progressToNextQuestionContent, questionContent } from "../../helpers/helpers";
+import { progressToNextQuestionContent, questionContent, generateHash } from "../../helpers/helpers";
 
 export default async function handler(req, res) {
   const { body } = req;
@@ -8,6 +8,17 @@ export default async function handler(req, res) {
     apiSecretKey: process.env.SECRET_KEY,
     userId: jsonBody.userId,
   })
+  // Check timeout
+  const timestamp = new Date(jsonBody.startTime.timestamp);
+  const hash = generateHash(jsonBody.startTime.timestamp);
+  const threshold = new Date(new Date(Date.now()) - (60 * 1000 * parseInt(process.env.THRESHOLD)));
+  if (hash != jsonBody.startTime.hash || timestamp < threshold) {
+    res.status(200).json({
+      result: 'timeout',
+      userId: jsonBody.userId,
+    });
+    return;
+  }
   // Get user state
   const ficResponse = await fictioneers.getUserTimelineEvents();
   const currentQuestion = ficResponse.data.filter(e => e.id == jsonBody.questionId)[0];

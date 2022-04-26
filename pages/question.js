@@ -4,6 +4,7 @@ import Loading from '../components/Loading'
 import Skipped from '../components/Skipped'
 import Incorrect from '../components/Incorrect'
 import Correct from '../components/Correct'
+import TimesUp from '../components/TimesUp'
 import ShowQuestion from '../components/ShowQuestion'
 
 export default function Question() {
@@ -14,6 +15,7 @@ export default function Question() {
   const [ screen, setScreen ] = useState("loading");
   const [ answerImage, setAnswerImage ] = useState(null);
   const [ error, setError ] = useState(null);
+  const [ startTime, setStartTime ] = useState(null);
 
   const saveQuestion = (questionContent, questionId) => {
     setQuestionContent(questionContent);
@@ -26,6 +28,8 @@ export default function Question() {
     const getUser = async () => {
       const response = await (await fetch("/api/start")).json();
       localStorage.setItem("userId", response.userId);
+      localStorage.setItem("startTime", JSON.stringify(response.startTime))
+      setStartTime(response.startTime)
       setUserId(response.userId);
       saveQuestion(response.question, response.questionId);
       setScreen('question');
@@ -35,6 +39,7 @@ export default function Question() {
       getUser();
     } else {
       setUserId(storedUserId);
+      setStartTime(JSON.parse(localStorage.getItem('startTime')));
       setQuestionContent(JSON.parse(localStorage.getItem('questionContent')));
       setQuestionId(localStorage.getItem('questionId'));
       setScreen('question');
@@ -46,6 +51,9 @@ export default function Question() {
       localStorage.setItem("score", response.correct);
       localStorage.setItem("outOf", response.correct + response.incorrect);
       router.push('/end');
+      return;
+    } else if (response.result == 'timeout') {
+      setScreen(response.result);
       return;
     }
     setScreen(response.result);
@@ -64,6 +72,7 @@ export default function Question() {
             userId,
             questionId,
             answer,
+            startTime,
         })
       });
       if (response.status == 200) {
@@ -83,6 +92,7 @@ export default function Question() {
       body: JSON.stringify({
           userId,
           questionId,
+          startTime,
       })
     });
     if (response.status == 200) {
@@ -110,9 +120,11 @@ export default function Question() {
         clickSkip={clickSkip} />
     );
   } else if (screen == 'skipped') {
-    return (<Skipped continueClicked={continueClicked}/>)
+    return (<Skipped continueClicked={continueClicked} />)
   } else if (screen == 'incorrect') {
-    return (<Incorrect continueClicked={continueClicked}/>);
+    return (<Incorrect continueClicked={continueClicked} />);
+  } else if (screen == 'timeout') {
+    return (<TimesUp />);
   } else {
     return (
       <Correct continueClicked={continueClicked} answerImage={answerImage} />

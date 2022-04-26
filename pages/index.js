@@ -12,6 +12,7 @@ export default function Home() {
       localStorage.removeItem('outOf');
       localStorage.removeItem('questionContent');
       localStorage.removeItem('questionId');
+      localStorage.removeItem('startTime');
     } else if (localStorage.getItem('userId')) {
       router.push('/question');
     }
