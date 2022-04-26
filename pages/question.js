@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Loading from '../components/Loading'
+import Skipped from '../components/Skipped'
+import Incorrect from '../components/Incorrect'
+import Correct from '../components/Correct'
+import ShowQuestion from '../components/ShowQuestion'
 
 export default function Question() {
   const router = useRouter();
@@ -10,16 +15,20 @@ export default function Question() {
   const [ answerImage, setAnswerImage ] = useState(null);
   const [ error, setError ] = useState(null);
 
+  const saveQuestion = (questionContent, questionId) => {
+    setQuestionContent(questionContent);
+    setQuestionId(questionId);
+    localStorage.setItem('questionContent', JSON.stringify(questionContent));
+    localStorage.setItem('questionId', questionId);
+  }
+
   useEffect(() => {
     const getUser = async () => {
       const response = await (await fetch("/api/start")).json();
       localStorage.setItem("userId", response.userId);
       setUserId(response.userId);
-      setQuestionContent(response.question);
-      setQuestionId(response.questionId);
+      saveQuestion(response.question, response.questionId);
       setScreen('question');
-      localStorage.setItem('questionContent', JSON.stringify(response.question));
-      localStorage.setItem('questionId', response.questionId);
     }
     const storedUserId = localStorage.getItem("userId");
     if (!storedUserId) {
@@ -40,10 +49,7 @@ export default function Question() {
       return;
     }
     setScreen(response.result);
-    setQuestionContent(response.question);
-    setQuestionId(response.questionId);
-    localStorage.setItem('questionContent', JSON.stringify(response.question));
-    localStorage.setItem('questionId', response.questionId);
+    saveQuestion(response.question, response.questionId);
     if (response.result == 'correct') {
       setAnswerImage(response.answerImage)
     }
@@ -52,15 +58,21 @@ export default function Question() {
   const clickAnswer = answer => {
     return async () => {
       setScreen('loading');
-      const response = await (await fetch("/api/answer", {
+      const response = await fetch("/api/answer", {
         method: "POST",
         body: JSON.stringify({
             userId,
             questionId,
             answer,
         })
-      })).json();
-      handleAnswer(response);
+      });
+      if (response.status == 200) {
+        const responseJson = await response.json();
+        handleAnswer(responseJson);
+      } else {
+        setError("Something went wrong!");
+        setScreen("question");
+      }
     }
   };
 
@@ -88,45 +100,22 @@ export default function Question() {
   const continueClicked = () => setScreen('question');
 
   if (screen == 'loading') {
-    return (
-      <p className="description">
-          Loading...
-      </p>
-    );
+    return (<Loading />);
   } else if (screen == 'question') {
     return (
-      <>
-        <img src={questionContent.image} alt="Mystery Pokemon" />
-        { error && (
-          <p>{error}</p>
-        )}
-        {questionContent.answers.map(a => (
-          <button onClick={clickAnswer(a)} key={a}>{a}</button>
-        ))}
-        <button onClick={clickSkip}>Skip</button>
-      </>
+      <ShowQuestion 
+        questionContent={questionContent}
+        error={error}
+        clickAnswer={clickAnswer}
+        clickSkip={clickSkip} />
     );
   } else if (screen == 'skipped') {
-    return (
-      <>
-        <p>Question skipped!</p>
-        <button onClick={continueClicked}>Continue</button>
-      </>
-    )
+    return (<Skipped continueClicked={continueClicked}/>)
   } else if (screen == 'incorrect') {
-    return (
-      <>
-        <p>You were wrong!</p>
-        <button onClick={continueClicked}>Continue</button>
-      </>
-    );
+    return (<Incorrect continueClicked={continueClicked}/>);
   } else {
     return (
-      <>
-        <p>You were right!</p>
-        <img src={answerImage} alt="Correct Pokemon!" />
-        <button onClick={continueClicked}>Continue</button>
-      </>
+      <Correct continueClicked={continueClicked} answerImage={answerImage} />
     );
   }
 }

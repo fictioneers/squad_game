@@ -1,28 +1,5 @@
-const contentful = require("contentful");
 import Fictioneers from "fictioneers-node-sdk";
-
-const shuffle = (array) => {
-  array.sort(() => Math.random() - 0.5);
-}
-
-const contentfulClient = contentful.createClient({
-  space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-});
-
-const end = async (res, fictioneers) => {
-  const ficResponse = await fictioneers.getUserTimelineEvents();
-  const answerEvents = ficResponse.data.filter(e => !e.thread_id);
-  const correctAnswerEvents = answerEvents.filter(e =>  e.state == 'COMPLETED');
-  const incorrectAnswerEvents = answerEvents.filter(e =>  e.state != 'COMPLETED');
-
-  res.status(200).json({
-    result: 'completed',
-    correct: correctAnswerEvents.length,
-    incorrect: incorrectAnswerEvents.length,
-  });
-};
-
+import { progressToNextQuestionContent, questionContent, contentfulClient } from "../../helpers/helpers";
 
 export default async function handler(req, res) {
   // Get token
@@ -51,19 +28,13 @@ export default async function handler(req, res) {
     // Get answer content
     const answerContent = await contentfulClient.getEntry(answerResponse.meta.upserted_event_hooks[0].content_integrations[0].content_id);
     // Progress user
-    const response = await fictioneers.progressUserStoryStateEvents({maxSteps: 1});
-    if (response.data.end_of_timeline_reached) {
-      await end(res, fictioneers);
+    const result = await progressToNextQuestionContent(fictioneers, res)
+    if (!result) {
       return;
     }
-    const { questionId, content } = response.meta.changed_timeline_events.map(e => {
-      return { 'questionId': e.id, 'content': e.narrative_event_content };
-    }).filter(e => e.content.length > 0)[0];
+    const [questionId, content] = result;
     // Get content
-    const question = await contentfulClient.getEntry(content[0].content_id);
-    const answers = question.fields.question.incorrect_answers;
-    answers.push(question.fields.question.correct_answer);
-    shuffle(answers);
+    const [answers, image] = await questionContent(content[0].content_id)
     // Return answer content & next question content
     res.status(200).json({
       result: 'correct',
@@ -71,7 +42,7 @@ export default async function handler(req, res) {
       questionId,
       question: {
         answers,
-        image: question.fields.image.fields.file.url,
+        image,
       },
       answerImage: answerContent.fields.answer.fields.file.url,
     });
@@ -82,19 +53,13 @@ export default async function handler(req, res) {
       state: 'SKIPPED',
     });
     // Progress user
-    const response = await fictioneers.progressUserStoryStateEvents({maxSteps: 1});
-    if (response.data.end_of_timeline_reached) {
-      await end(res, fictioneers);
+    const result = await progressToNextQuestionContent(fictioneers, res)
+    if (!result) {
       return;
     }
-    const { questionId, content } = response.meta.changed_timeline_events.map(e => {
-      return { 'questionId': e.id, 'content': e.narrative_event_content };
-    }).filter(e => e.content.length > 0)[0];
+    const [questionId, content] = result;
     // Get content
-    const question = await contentfulClient.getEntry(content[0].content_id);
-    const answers = question.fields.question.incorrect_answers;
-    answers.push(question.fields.question.correct_answer);
-    shuffle(answers);
+    const [answers, image] = await questionContent(content[0].content_id)
     // Return incorrect response
     res.status(200).json({
       result: 'incorrect',
@@ -102,7 +67,7 @@ export default async function handler(req, res) {
       questionId,
       question: {
         answers,
-        image: question.fields.image.fields.file.url,
+        image,
       },
     });
   }

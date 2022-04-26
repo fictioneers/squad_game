@@ -1,15 +1,6 @@
 const crypto = require('crypto');
-const contentful = require("contentful");
 import Fictioneers from "fictioneers-node-sdk";
-
-const shuffle = (array) => {
-  array.sort(() => Math.random() - 0.5);
-}
-
-const contentfulClient = contentful.createClient({
-  space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-});
+import { progressToNextQuestionContent, questionContent } from "../../helpers/helpers";
 
 export default async function handler(req, res) {
   // Generate user ID
@@ -22,22 +13,21 @@ export default async function handler(req, res) {
   // Create fictioneers user
   await fictioneers.createUser({timelineId: process.env.TIMELINE_ID});
   // Progress user
-  const response = await fictioneers.progressUserStoryStateEvents({maxSteps: 1});
-  const { questionId, content } = response.meta.changed_timeline_events.map(e => {
-    return { 'questionId': e.id, 'content': e.narrative_event_content };
-  }).filter(e => e.content.length > 0)[0];
+  const result = await progressToNextQuestionContent(fictioneers, res)
+  if (!result) {
+    return;
+  }
+  console.log(`Result: ${result}`);
+  const [questionId, content] = result;
   // Get content
-  const question = await contentfulClient.getEntry(content[0].content_id);
-  const answers = question.fields.question.incorrect_answers;
-  answers.push(question.fields.question.correct_answer);
-  shuffle(answers);
+  const [answers, image] = await questionContent(content[0].content_id)
   // Return question 1
   res.status(200).json({
     userId,
     questionId,
     question: {
       answers,
-      image: question.fields.image.fields.file.url,
+      image,
     },
   });
 }
