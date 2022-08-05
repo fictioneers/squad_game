@@ -10,13 +10,12 @@ export default function End({ message }) {
 
   return (
     <>
-      <h1 className="title">
-        { message }
-      </h1>
-
-      <button onClick={tryAgainClicked}>
+      <div className="description">
+        <p>{ message }</p>
+        <button onClick={tryAgainClicked}>
           Try again!
-      </button>
+        </button>
+      </div>
     </>
   )
 }
