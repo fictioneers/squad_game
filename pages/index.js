@@ -20,10 +20,11 @@ export default function Home() {
   };
 
   return (
-    <p className="description">
+    <div className="description">
+      <p>TODO: description / instructions go here</p>
       <button onClick={start}>
         Start
       </button>
-    </p>
+    </div>
   )
 }

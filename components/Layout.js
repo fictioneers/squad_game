@@ -1,23 +1,19 @@
 import Head from 'next/head'
-import styles from '../styles/Layout.module.css'
 
 const Layout = ({ children }) => {
   return (
-    <div className={styles.container}>
+    <div className="container">
       <Head>
         <title>Squad Game</title>
         <meta name="description" content="Quiz with player elimination" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Squad Game
-        </h1>
+      <main>
         {children}
       </main>
 
-      <footer className={styles.footer}>
+      <footer>
         <a
           href="https://fictioneers.co.uk"
           target="_blank"

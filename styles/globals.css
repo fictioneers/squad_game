@@ -1,36 +1,157 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
 
-a {
-  color: inherit;
-  text-decoration: none;
+:root {
+    --sky: #c1d1e8;
+    --earth: #bcb099;
+    --cta: #ffce39;
+    --light-bg: #f4f4f4;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-.description {
-  text-align: center;
+html,
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
+    font-size: 30px;
+    text-align: center;
+    background-color: var(--earth);
 }
 
-.description {
-  margin: 4rem 0;
-  line-height: 1.5;
-  font-size: 1.5rem;
+div.container {
+    width: 100%;
+    background-color: var(--sky);
+    padding-top: 40vh;
+}
+
+main {
+    max-width: 1000px;
+    width: 80%;
+    margin: auto auto;
+    position: relative;
+}
+
+footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    padding-bottom: 2rem;
+    font-size: 0.7rem;
+}
+
+h1 {
+    margin: 0;
+}
+
+b {
+    font-weight: 700;
+}
+
+a {
+    color: inherit;
+}
+
+div.description {
+    text-align: center;
+    margin-bottom: -4rem;
+    position: relative;
+    top: -10vh;
+    background-color: var(--light-bg);
+    border-radius: 2rem;
+    padding: 2rem;
+}
+
+span.ingredient {
+    cursor: pointer;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 200px;
+    height: 200px;
+}
+
+span.ingredient.kettle {
+    background-image: url(/img/kettle.png);
+    left: 17vw;
+    top: -12vh;
+    z-index: 2;
+    width: 280px;
+    height: 280px;
+}
+span.ingredient.mug {
+    background-image: url(/img/mug.png);
+    right: -4vw;
+    top: 11vh;
+    z-index: 10;
+    width: 250px;
+    height: 250px;
+}
+span.ingredient.teabag {
+    background-image: url(/img/teabag.png);
+    left: 10vw;
+    top: 11vh;
+    z-index: 8;
+    width: 150px;
+    height: 150px;
+}
+span.ingredient.herbal-teabag {
+    background-image: url(/img/herbal-teabag.png);
+    left: 50vw;
+    top: 6vh;
+    z-index: 9;
+    width: 150px;
+    height: 150px;
+}
+span.ingredient.soy-milk {
+    background-image: url(/img/soy-milk.png);
+    left: 2vw;
+    top: -10vh;
+    z-index: 1;
+}
+span.ingredient.white-sugar {
+    background-image: url(/img/white-sugar.png);
+    left: 72vw;
+    top: 0vh;
+    z-index: 4;
+}
+span.ingredient.brown-sugar {
+    background-image: url(/img/brown-sugar.png);
+    left: 25vw;
+    top: 8vh;
+    width: 220px;
+    height: 220px;
+}
+span.ingredient.spoon {
+    background-image: url(/img/spoon.png);
+    left: 0;
+    top: 0vh;
+}
+span.ingredient.time {
+    background-image: url(/img/time.png);
+    top: -45vh;
+    width: 350px;
+    height: 350px;
+}
+span.ingredient.fish {
+    background-image: url(/img/fish.png);
+    width: 320px;
+    height: 320px;
+    top: -13vh;
+    left: 45vw;
 }
 
 button {
-  font-size: 24px;
-  min-width: 250px;
-  margin: 10px;
-}
-
-.coral-back {
-  background-color: lightcoral;
+    background-color: var(--cta);
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    padding: 1rem 4rem;
+    border: 0;
+    cursor: pointer;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 700;
 }

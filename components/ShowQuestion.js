@@ -1,10 +1,10 @@
 const ShowQuestion = ({answers, error, clickAnswer}) => (
   <>
     { error && (
-      <p className="coral-back">{error}</p>
+      <p>{error}</p>
     )}
     {answers.map(a => (
-      <button onClick={clickAnswer(a)} key={a}>{a}</button>
+      <span className={a.replace(' ','-') + " ingredient"} onClick={clickAnswer(a)} key={a} title={a}/>
     ))}
   </>
 );
