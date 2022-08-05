@@ -1,7 +1,6 @@
-const Correct = ({continueClicked, answerImage}) => (
+const Correct = ({continueClicked}) => (
   <>
     <p>You were right!</p>
-    <img src={answerImage} alt="Correct Pokemon!" />
     <button onClick={continueClicked}>Continue</button>
   </>
 );

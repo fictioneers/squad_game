@@ -1,5 +1,5 @@
 import Fictioneers from "fictioneers-node-sdk";
-import { progressToNextQuestionContent, questionContent, contentfulClient, generateHash } from "../../helpers/helpers";
+import { progressUserReachesEnd } from "../../helpers/helpers";
 
 export default async function handler(req, res) {
   // Get token
@@ -9,77 +9,51 @@ export default async function handler(req, res) {
     apiSecretKey: process.env.SECRET_KEY,
     userId: jsonBody.userId,
   })
-  // Check timeout
-  const timestamp = new Date(jsonBody.startTime.timestamp);
-  const hash = generateHash(jsonBody.startTime.timestamp);
-  const threshold = new Date(new Date(Date.now()) - (60 * 1000 * parseInt(process.env.THRESHOLD)));
-  if (hash != jsonBody.startTime.hash || timestamp < threshold) {
-    res.status(200).json({
-      result: 'timeout',
-      userId: jsonBody.userId,
-    });
-    return;
-  }
   // Get user state
   const ficResponse = await fictioneers.getUserTimelineEvents();
-  const currentQuestion = ficResponse.data.filter(e => e.id == jsonBody.questionId)[0];
-  const content = await contentfulClient.getEntry(currentQuestion.narrative_event_content[0].content_id);
+  const currentQuestion = ficResponse.data.filter(e => e.id === jsonBody.questionId)[0];
+  const correct_answer = currentQuestion.narrative_event_title
   // If answer correct
-  if (content.fields.question.correct_answer == jsonBody.answer) {
+  if (correct_answer == jsonBody.answer) {
     // Mark question complete
-    await fictioneers.updateUserTimelineEvent({ 
+    const response = await fictioneers.updateUserTimelineEvent({ 
       timelineEventId: currentQuestion.id,
       state: 'COMPLETED',
     });
-    // Mark answer complete
-    const answerResponse = await fictioneers.updateUserTimelineEvent({ 
-      timelineEventId: currentQuestion.related_timeline_event_ids[0],
-      state: 'COMPLETED',
-    });
-    // Get answer content
-    const answerContent = await contentfulClient.getEntry(answerResponse.meta.upserted_event_hooks[0].content_integrations[0].content_id);
-    // Progress user
-    const result = await progressToNextQuestionContent(fictioneers, res)
-    if (!result) {
+    const nextQuestionId = response.meta.changed_timeline_event_states.filter(e => e.state === 'AVAILABLE')[0]?.timeline_event_id
+    // Handle having reached the final activity in time
+    if (!nextQuestionId) {
+      res.status(200).json({
+        result: 'completed',
+        message: ficResponse.data.filter(e => e.id === currentQuestion.related_timeline_event_ids[0])[0].narrative_event_description
+      });
       return;
     }
-    const [questionId, content] = result;
-    // Get content
-    const [answers, image] = await questionContent(content[0].content_id)
-    // Return answer content & next question content
+    // Progress user
+    const result = await progressUserReachesEnd(fictioneers, res)
+    if (result) {
+      res.status(200).json({
+        result: 'completed',
+        message: result,
+      });
+      return;
+    }
+    // Return next question ID
     res.status(200).json({
       result: 'correct',
       userId: jsonBody.userId,
-      questionId,
-      question: {
-        answers,
-        image,
-      },
-      answerImage: answerContent.fields.answer.fields.file.url,
+      questionId: nextQuestionId,
     });
-  } else {
-    // Mark question complete
-    await fictioneers.updateUserTimelineEvent({
-      timelineEventId: currentQuestion.id,
-      state: 'SKIPPED',
-    });
-    // Progress user
-    const result = await progressToNextQuestionContent(fictioneers, res)
-    if (!result) {
-      return;
-    }
-    const [questionId, content] = result;
-    // Get content
-    const [answers, image] = await questionContent(content[0].content_id)
-    // Return incorrect response
-    res.status(200).json({
-      result: 'incorrect',
-      userId: jsonBody.userId,
-      questionId,
-      question: {
-        answers,
-        image,
-      },
-    });
+    return;
   }
+  // Mark question complete
+  await fictioneers.updateUserTimelineEvent({
+    timelineEventId: currentQuestion.id,
+    state: 'SKIPPED',
+  });
+  // Return incorrect response
+  res.status(200).json({
+    result: 'completed',
+    message: ficResponse.data.filter(e => e.id === currentQuestion.related_timeline_event_ids[0])[0].narrative_event_description
+  });
 }

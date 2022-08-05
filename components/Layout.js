@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Head from 'next/head'
 import styles from '../styles/Layout.module.css'
 
@@ -6,14 +5,14 @@ const Layout = ({ children }) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Who&apos;s That Pokemon?</title>
-        <meta name="description" content="Pokemon identification quiz" />
+        <title>Squad Game</title>
+        <meta name="description" content="Quiz with player elimination" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          <Image src="/title.png" alt="Who's That Pokemon?" width="710" height="92" />
+          Squad Game
         </h1>
         {children}
       </main>
