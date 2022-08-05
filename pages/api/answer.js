@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       return;
     }
     // Progress user
-    const result = await progressUserReachesEnd(fictioneers, res)
+    const result = await progressUserReachesEnd(fictioneers)
     if (result) {
       res.status(200).json({
         result: 'completed',
