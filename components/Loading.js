@@ -1,7 +1,7 @@
 const Loading = () => (
-  <p className="description">
-    Loading...
-  </p>
+  <div className="description">
+    <p>Loading...</p>
+  </div>
 );
 
 export default Loading;

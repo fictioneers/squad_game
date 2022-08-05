@@ -75,17 +75,41 @@ span.ingredient {
     height: 200px;
 }
 
+span.ingredient:hover {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
 span.ingredient.kettle {
     background-image: url(/img/kettle.png);
-    left: 17vw;
-    top: -12vh;
+    left: 15vw;
+    top: -14vh;
     z-index: 2;
-    width: 280px;
-    height: 280px;
+    width: 300px;
+    height: 300px;
 }
 span.ingredient.mug {
     background-image: url(/img/mug.png);
-    right: -4vw;
+    right: 3vw;
     top: 11vh;
     z-index: 10;
     width: 250px;
@@ -101,7 +125,7 @@ span.ingredient.teabag {
 }
 span.ingredient.herbal-teabag {
     background-image: url(/img/herbal-teabag.png);
-    left: 50vw;
+    left: 45vw;
     top: 6vh;
     z-index: 9;
     width: 150px;
@@ -115,7 +139,7 @@ span.ingredient.soy-milk {
 }
 span.ingredient.white-sugar {
     background-image: url(/img/white-sugar.png);
-    left: 72vw;
+    right: 0vw;
     top: 0vh;
     z-index: 4;
 }
@@ -134,6 +158,7 @@ span.ingredient.spoon {
 span.ingredient.time {
     background-image: url(/img/time.png);
     top: -45vh;
+    right: 5vw;
     width: 350px;
     height: 350px;
 }
@@ -142,7 +167,7 @@ span.ingredient.fish {
     width: 320px;
     height: 320px;
     top: -13vh;
-    left: 45vw;
+    left: 42vw;
 }
 
 button {
