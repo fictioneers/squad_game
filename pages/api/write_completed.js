@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   console.info(`Parsed body: ${body}`);
   if (body.event_type !== 'state.changed' ||
       body.event_object.user_timeline_event_state !== 'COMPLETED' ||
-      body.event_object.user_timeline_event_id !== 'OEbC8M1FJ9FcTiVQFqqa') {
+      body.event_object.timeline_event_id !== 'OEbC8M1FJ9FcTiVQFqqa') {
     console.info('Not handling event');
     res.status(200).json({});
     return;
