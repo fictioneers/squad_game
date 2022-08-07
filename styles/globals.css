@@ -169,6 +169,10 @@ span.ingredient.fish {
     top: -13vh;
     left: 42vw;
 }
+span.ingredient.milk {
+    background-image: url(/img/milk.png);
+    z-index: 1;
+}
 
 button {
     background-color: var(--cta);
