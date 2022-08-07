@@ -9,8 +9,9 @@ const options = {
 const rtsClient = new RedisTimeSeries(options);
 
 export default async function handler(req, res) {
-  const body = req.body;
-  console.info(`Request body: ${JSON.stringify(body)}`)
+  console.info(`Request body: ${JSON.stringify(req.body)}`);
+  const body = JSON.parse(req.body);
+  console.info(`Parsed body: ${body}`);
   if (body.event_type !== 'state.changed' ||
       body.event_object.user_timeline_event_state !== 'COMPLETED' ||
       body.event_object.user_timeline_event_id !== 'OEbC8M1FJ9FcTiVQFqqa') {
