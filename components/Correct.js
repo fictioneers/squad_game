@@ -1,6 +1,6 @@
-const Correct = ({continueClicked}) => (
+const Correct = ({ continueClicked, message }) => (
   <>
-    <p>You were right!</p>
+    <p>{message}</p>
     <button onClick={continueClicked}>Continue</button>
   </>
 );

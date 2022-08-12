@@ -2,10 +2,10 @@ export const end = async (fictioneers) => {
   const ficResponse = await fictioneers.getUserTimelineEvents();
   ficResponse.data.sort((a, b) => {
     return b.available_step_index - a.available_step_index
-  })
-  const finalEvent = ficResponse.data[0]
+  });
+  const finalEvent = ficResponse.data[0];
 
-  return finalEvent.narrative_event_description
+  return finalEvent.narrative_event_description;
 };
 
 export const progressUserReachesEnd = async (fictioneers) => {

@@ -27,7 +27,7 @@ export default function Home() {
       localStorage.setItem('ingredients', JSON.stringify(response.ingredients));
       setGoalAndTimeWindow(response.goal, response.timeWindow);
       setMessage(response.message);
-    }
+    };
     getUser();
   }, [])
 

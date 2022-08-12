@@ -36,9 +36,7 @@ export default function Question() {
   }, []);
 
   const handleAnswer = (response) => {
-    if (response.result == 'completed') {
-      setMessage(response.message);
-    }
+    setMessage(response.message);
     setScreen(response.result);
     saveQuestion(response.questionId);
   };
@@ -79,7 +77,9 @@ export default function Question() {
     return (<End message={message} />);
   } else {
     return (
-      <Correct continueClicked={continueClicked} />
+      <Correct
+        message={message}
+        continueClicked={continueClicked} />
     );
   }
 }
