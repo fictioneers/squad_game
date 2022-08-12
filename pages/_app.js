@@ -1,12 +1,15 @@
-import '../styles/globals.css'
-import Layout from '../components/Layout'
+import '../styles/globals.css';
+import Layout from '../components/Layout';
+import GameProvider from '../components/GameContext';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <GameProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </GameProvider>
   );
 }
 
-export default MyApp
+export default MyApp;

@@ -1,6 +1,14 @@
 import Head from 'next/head'
+import { useState } from 'react'
+import BossStatus from './BossStatus';
 
 const Layout = ({ children }) => {
+  const [bossView, setBossView] = useState(false);
+
+  const toggleBoss = () => {
+    setBossView(!bossView);
+  }
+
   return (
     <div className="container">
       <Head>
@@ -9,8 +17,18 @@ const Layout = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <button
+        onClick={toggleBoss}
+        className="boss-button">
+        {!bossView && "Check on the Boss"}
+        {bossView && "Hide from the Boss"}
+      </button>
+
       <main>
-        {children}
+        {!bossView && children}
+        {bossView && (
+          <BossStatus />
+        )}
       </main>
 
       <footer>

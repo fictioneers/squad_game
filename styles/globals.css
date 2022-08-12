@@ -184,3 +184,9 @@ button {
     font-family: 'Josefin Sans', sans-serif;
     font-weight: 700;
 }
+
+.boss-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}

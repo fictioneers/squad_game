@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Loading from '../components/Loading';
 import End from '../components/end';
 import Correct from '../components/Correct';
 import ShowQuestion from '../components/ShowQuestion';
 import { useRouter } from 'next/router';
+import { GameContext } from '../components/GameContext';
 
 export default function Question() {
+  const { setGoal, setTimeWindow } = useContext(GameContext);
   const router = useRouter();
   const [ userId, setUserId ] = useState("");
   const [ questionId, setQuestionId ] = useState(null);
@@ -28,6 +30,8 @@ export default function Question() {
       setQuestionId(localStorage.getItem('questionId'));
       setIngredients(JSON.parse(localStorage.getItem('ingredients')));
       setScreen('question');
+      setGoal(localStorage.getItem('goal'));
+      setTimeWindow(localStorage.getItem('timeWindow'));
     }
   }, []);
 
