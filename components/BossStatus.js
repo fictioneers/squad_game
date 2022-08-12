@@ -8,7 +8,7 @@ const BossStatus = () => {
 
   useEffect(() => {
     const getCurrentCompleted = async () => {
-      const response = await (await fetch(`/api/read_completed?period=${timeWindow}`)).json();
+      const response = await (await fetch(`/api/read_completed?period=${timeWindow * 1000}`)).json();
       setCurrentCompleted(response.completed);
     };
     if (timeWindow > 0) {
