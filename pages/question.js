@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import Loading from '../components/Loading'
-import End from './end'
+import End from '../components/end'
 import Correct from '../components/Correct'
 import ShowQuestion from '../components/ShowQuestion'
 
 export default function Question() {
-  const router = useRouter();
   const [ userId, setUserId ] = useState("");
   const [ questionId, setQuestionId ] = useState(null);
   const [ ingredients, setIngredients ] = useState(null);
