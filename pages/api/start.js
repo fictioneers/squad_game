@@ -13,12 +13,15 @@ export default async function handler(req, res) {
   await fictioneers.createUser({timelineId: process.env.TIMELINE_ID});
   // Progress user
   const response = await fictioneers.progressUserStoryStateEvents({maxSteps: null});
-  const ingredients = response.meta.changed_timeline_events[0].narrative_event_custom_data.ingredients.split(', ');
+  const startingEvent = response.meta.changed_timeline_events[0];
+  const ingredients = startingEvent.narrative_event_custom_data.ingredients.split(', ');
+  const message = startingEvent.narrative_event_description;
   const questionId = response.meta.changed_timeline_events.filter(e => e.narrative_event_type === 'ACTIVITY')[0].id
   // Return question 1
   res.status(200).json({
     userId,
     questionId,
     ingredients,
+    message,
   });
 }

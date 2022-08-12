@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
-import Loading from '../components/Loading'
-import End from '../components/end'
-import Correct from '../components/Correct'
-import ShowQuestion from '../components/ShowQuestion'
+import { useEffect, useState } from 'react';
+import Loading from '../components/Loading';
+import End from '../components/end';
+import Correct from '../components/Correct';
+import ShowQuestion from '../components/ShowQuestion';
+import { useRouter } from 'next/router';
 
 export default function Question() {
+  const router = useRouter();
   const [ userId, setUserId ] = useState("");
   const [ questionId, setQuestionId ] = useState(null);
   const [ ingredients, setIngredients ] = useState(null);
@@ -17,23 +19,10 @@ export default function Question() {
     localStorage.setItem('questionId', questionId);
   }
 
-  const saveIngredients = (ingredients) => {
-    setIngredients(ingredients);
-    localStorage.setItem('ingredients', JSON.stringify(ingredients));
-  }
-
   useEffect(() => {
-    const getUser = async () => {
-      const response = await (await fetch("/api/start")).json();
-      localStorage.setItem("userId", response.userId);
-      setUserId(response.userId);
-      saveQuestion(response.questionId);
-      saveIngredients(response.ingredients);
-      setScreen('question');
-    }
     const storedUserId = localStorage.getItem("userId");
     if (!storedUserId) {
-      getUser();
+      router.push("/");
     } else {
       setUserId(storedUserId);
       setQuestionId(localStorage.getItem('questionId'));
@@ -44,7 +33,7 @@ export default function Question() {
 
   const handleAnswer = (response) => {
     if (response.result == 'completed') {
-      setMessage(response.message)
+      setMessage(response.message);
     }
     setScreen(response.result);
     saveQuestion(response.questionId);
