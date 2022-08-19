@@ -16,7 +16,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (localStorage.getItem('userId')) {
+    if (localStorage.getItem('userId') && localStorage.getItem('started')) {
       router.push('/question');
       return;
     }
@@ -26,12 +26,13 @@ export default function Home() {
       localStorage.setItem('questionId', response.questionId);
       localStorage.setItem('ingredients', JSON.stringify(response.ingredients));
       setGoalAndTimeWindow(response.goal, response.timeWindow);
-      setMessage(response.message);
+      setMessage(response.message.replace("\n", "<br/><br/>"));
     };
     getUser();
   }, [])
 
   const start = () => {
+    localStorage.setItem('started', true);
     router.push('/question');
   };
 
@@ -41,7 +42,7 @@ export default function Home() {
 
   return (
     <div className="description">
-      <p>{message}</p>
+      <p dangerouslySetInnerHTML={{ __html: message }}></p>
       <button onClick={start}>
         Start
       </button>

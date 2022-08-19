@@ -8,6 +8,7 @@ export default function End({ message }) {
     localStorage.removeItem('userId');
     localStorage.removeItem('ingredients');
     localStorage.removeItem('questionId');
+    localStorage.setItem('started', false);
   }, []);
 
   const tryAgainClicked = () => {

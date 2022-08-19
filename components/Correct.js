@@ -1,7 +1,9 @@
 const Correct = ({ continueClicked, message }) => (
   <>
-    <p>{message}</p>
-    <button onClick={continueClicked}>Continue</button>
+    <div className="description">
+        <p>{message}</p>
+        <button onClick={continueClicked}>Continue</button>
+    </div>
   </>
 );
 

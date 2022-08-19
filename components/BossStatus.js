@@ -21,10 +21,8 @@ const BossStatus = () => {
   }
   return (
     <div className="description">
-      <p>
-        {goal <= currentCompleted && "Happy boss"}
-        {goal > currentCompleted && "Angry boss"}
-      </p>
+        {goal <= currentCompleted && <div className="boss boss-happy"><p>The boss is happy :) </p></div>}
+        {goal > currentCompleted && <div className="boss boss-angry"><p>The boss is angry :( </p></div>}
     </div>
   );
 }

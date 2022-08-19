@@ -29,10 +29,11 @@ div.container {
 }
 
 main {
-    max-width: 1000px;
-    width: 80%;
+    width: 100%;
     margin: auto auto;
     position: relative;
+    height: 400px;
+    background-color: var(--earth);
 }
 
 footer {
@@ -57,13 +58,28 @@ a {
 }
 
 div.description {
-    text-align: center;
-    margin-bottom: -4rem;
-    position: relative;
-    top: -10vh;
+    text-align: left;
+    position: absolute;
+    width: 80%;
+    max-width: 1000px;
+    min-height: 300px;
+    top: -20vh;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     background-color: var(--light-bg);
     border-radius: 2rem;
     padding: 2rem;
+    
+}
+
+div.ingredients-table {
+    max-width: 1000px;
+    width: 80%;
+    margin: auto auto;
+    position: relative;
+    margin-top: 3rem;
 }
 
 span.ingredient {
@@ -149,11 +165,12 @@ span.ingredient.brown-sugar {
     top: 8vh;
     width: 220px;
     height: 220px;
+    z-index: 10;
 }
 span.ingredient.spoon {
     background-image: url(/img/spoon.png);
     left: 0;
-    top: 0vh;
+    top: 3vh;
 }
 span.ingredient.time {
     background-image: url(/img/time.png);
@@ -189,4 +206,30 @@ button {
     position: absolute;
     top: 10px;
     left: 10px;
+}
+
+div.reset {
+    margin-top: 1rem;
+    font-size: 0.5rem;
+}
+
+div.boss {
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 500px;
+    margin-bottom: -2rem;
+    position: relative;
+}
+
+.boss.boss-happy {
+    background-image: url(/img/boss-happy.png);
+}
+
+.boss.boss-angry {
+    background-image: url(/img/boss-angry.png);
+}
+.boss p {
+    position: absolute;
+    top: 3rem;
+    right: 0;
 }

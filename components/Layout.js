@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import BossStatus from './BossStatus';
+import Reset from './Reset';
 
 const Layout = ({ children }) => {
   const [bossView, setBossView] = useState(false);
@@ -32,13 +33,12 @@ const Layout = ({ children }) => {
       </main>
 
       <footer>
-        <a
+      Powered by <a
           href="https://fictioneers.co.uk"
           target="_blank"
           rel="noopener noreferrer"
-        >
-          Powered by Fictioneers
-        </a>
+        >Fictioneers</a>
+        <Reset/>
       </footer>
     </div>
   )
