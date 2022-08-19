@@ -71,7 +71,11 @@ div.description {
     background-color: var(--light-bg);
     border-radius: 2rem;
     padding: 2rem;
-    
+}
+
+.center {
+    width: 100%;
+    text-align: center !important;
 }
 
 div.ingredients-table {

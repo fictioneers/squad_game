@@ -20,7 +20,7 @@ export default function End({ message }) {
       <div className="description">
         <p>{ message }</p>
         <button onClick={tryAgainClicked}>
-          Try again!
+          More tea!
         </button>
       </div>
     </>
